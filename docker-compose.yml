@@ -1,0 +1,34 @@
+version: '3'
+services:
+  # Node.js App
+  app:
+    build: .
+    ports:
+      - "5000:5000"
+    environment:
+      - MONGODB_URI=mongodb://mongo:27017/mydatabase
+      - JWT_SECRET=your_jwt_secret
+      - GROQ_API_KEY=your_groq_api_key
+      - VOICERSS_API_KEY=your_voicerss_api_key
+    depends_on:
+      - mongo
+    volumes:
+      - .:/app
+    networks:
+      - app-network
+
+  # MongoDB Service
+  mongo:
+    image: mongo:4.2
+    ports:
+      - "27017:27017"
+    networks:
+      - app-network
+    volumes:
+      - mongodb_data:/data/db
+
+volumes:
+  mongodb_data:
+
+networks:
+  app-network:
